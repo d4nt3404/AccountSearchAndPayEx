@@ -29,5 +29,20 @@ namespace AcountSearchAndPayment.Services
             .FirstOrDefault(i => i.InvoiceId == invoiceId);
             return invoiceFound;
         }
+
+        public void UpdateInvoice(Invoice invoice, decimal amountPay, bool isTotalPayment)
+        {
+            var invoiceFound = _dbContext.Invoice
+            .FirstOrDefault(i => i.InvoiceId == invoice.InvoiceId);
+
+            if (invoiceFound != null)
+            {
+                invoiceFound.Paid = isTotalPayment;
+                invoiceFound.LastPaymentDate = DateTime.Now;
+                invoiceFound.AmountDue -= amountPay;
+
+                _dbContext.SaveChanges(); ; // Save the changes to the database
+            }
+        }
     }
 }
