@@ -1,0 +1,18 @@
+@model AcountSearchAndPayment.Models.PayInvoiceViewModel
+
+@using (Html.BeginForm("PayInvoice", "Invoice", FormMethod.Post))
+{
+	<div class="form-group">
+		@Html.LabelFor(model => model.Invoice.AmountDue)
+		@Html.DisplayFor(model => model.Invoice.AmountDue)
+	</div>
+
+	<div class="form-group">
+		@Html.LabelFor(model => model.PaymentTransaction.PaymentAmount)
+		@Html.EditorFor(model => model.PaymentTransaction.PaymentAmount)
+	</div>
+
+	<!-- Otras propiedades del modelo PaymentTransaction -->
+
+	<button type="submit" class="btn btn-primary">Register payment</button>
+}

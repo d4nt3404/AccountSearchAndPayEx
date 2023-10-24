@@ -1,0 +1,73 @@
+﻿@model IEnumerable<AcountSearchAndPayment.Models.Invoice>
+
+@{
+	ViewBag.Title = "Unpaid Invoices";
+}
+
+
+@using (Html.BeginForm("UnpaidInvoices", "Invoice", FormMethod.Get))
+{
+	<div>
+		<div class="input-group mb-3">
+			<input type="text" class="form-control" name="accountName" placeholder="Account Name" aria-label="Account Name" aria-describedby="button-addon2">
+			<button class="btn btn-outline-secondary" type="submit">Search</button>
+		</div>
+	</div>
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+	<meta name="viewport" content="width=device-width" />
+	<title>UnpaidInvoices</title>
+</head>
+<body>
+	<table class="table">
+		<tr>
+			<th>
+				@Html.DisplayNameFor(model => model.InvoiceNumber)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.AccountName)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.AmountDue)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.DueDate)
+			</th>
+			<th>
+				Actions
+			</th>
+			<th></th>
+		</tr>
+		@if (Model != null)
+		{
+				foreach (var item in Model)
+				{
+					<tr>
+						<td>
+							@Html.DisplayFor(modelItem => item.InvoiceNumber)
+						</td>
+						<td>
+							@Html.DisplayFor(modelItem => item.AccountName)
+						</td>
+						<td>
+							@Html.DisplayFor(modelItem => item.AmountDue)
+						</td>
+						<td>
+							@Html.DisplayFor(modelItem => item.DueDate)
+						</td>
+						<td>
+							@using (Html.BeginForm("PayInvoice", "Invoice", new { invoiceId = item.InvoiceId, paymentAmount = item.AmountDue }, FormMethod.Post))
+							{
+								<button type="submit" class="btn btn-primary" name="paymentType" value="complete">Pay Invoice</button>
+							}
+						</td>
+					</tr>
+				}
+		}
+	</table>
+</body>
+</html>
