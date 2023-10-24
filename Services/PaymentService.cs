@@ -32,18 +32,7 @@ namespace AcountSearchAndPayment.Services
             _context.SaveChanges();
         }
 
-        public void UpdateInvoice(Invoice invoice)
-        {
-            if (invoice != null)
-            {
-                invoice.Paid = true;
-                invoice.LastPaymentDate = DateTime.Now;
-
-                _context.SaveChanges(); // Save the changes to the database
-            }
-        }
-
-        // Method to calculate the total payment
+        // Method to calculate the total payment TODO
         private decimal CalculateTotalPayment(string accountName)
         {
             var unpaidInvoices = _context.Invoice

@@ -40,24 +40,46 @@ namespace AcountSearchAndPayment.Controllers
             return View(invoice);
         }
 
-        [HttpPost]
-        public ActionResult PayInvoice(int invoiceId, decimal paymentAmount)
+        public ActionResult PayInvoice(int invoiceId)
         {
-            // 1. Record the payment in the Payment Transaction table
-            var paymentTransaction = new PaymentTransaction
-            {
-                InvoiceId = invoiceId,
-                PaymentAmount = paymentAmount,
-                PaymentDate = DateTime.Now
-            };
-            _paymentService.AddPaymentTransaction(paymentTransaction);
-
-            // 2. Update the Invoice table
-
+            // Retrieve invoice and payment information
             var invoice = _searchService.GetInvoiceById(invoiceId);
-            _paymentService.UpdateInvoice(invoice);
+            var paymentTransaction = new PaymentTransaction();
 
-            return RedirectToAction("SearchForm");
+            // Creates a ViewModel that combines invoice data and payment information
+            var viewModel = new PayInvoiceViewModel
+            {
+                Invoice = invoice,
+                PaymentTransaction = paymentTransaction
+            };
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public ActionResult RegisterPayment(PayInvoiceViewModel viewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                // 1. Record the payment in the Payment Transaction table
+                    var paymentTransaction = new PaymentTransaction
+                {
+                    InvoiceId = viewModel.Invoice.InvoiceId,
+                    PaymentAmount = viewModel.PaymentTransaction.PaymentAmount,
+                    PaymentDate = DateTime.Now
+                };
+                _paymentService.AddPaymentTransaction(paymentTransaction);
+
+                // 2. Update the Invoice table
+
+                    var invoice = _searchService.GetInvoiceById(viewModel.Invoice.InvoiceId);
+                if(viewModel.IsTotalPayment)
+                {
+                   viewModel.PaymentTransaction.PaymentAmount = viewModel.Invoice.AmountDue;
+                }
+                    _searchService.UpdateInvoice(invoice, viewModel.PaymentTransaction.PaymentAmount, viewModel.IsTotalPayment);
+            }
+            return RedirectToAction("UnpaidInvoices");
         }
 
         // GET: Display a payment success page

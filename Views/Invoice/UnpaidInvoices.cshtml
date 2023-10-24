@@ -60,9 +60,12 @@
 							@Html.DisplayFor(modelItem => item.DueDate)
 						</td>
 						<td>
-							@using (Html.BeginForm("PayInvoice", "Invoice", new { invoiceId = item.InvoiceId, paymentAmount = item.AmountDue }, FormMethod.Post))
+							@using (Html.BeginForm("PayInvoice", "Invoice", new 
+							{ invoiceId = item.InvoiceId, 
+								paymentAmount = item.AmountDue
+								}, FormMethod.Post))
 							{
-								<button type="submit" class="btn btn-primary" name="paymentType" value="complete">Pay Invoice</button>
+								<button type="submit" class="btn btn-primary" value="complete">Pay Invoice</button>
 							}
 						</td>
 					</tr>

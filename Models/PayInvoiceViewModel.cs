@@ -9,5 +9,7 @@ namespace AcountSearchAndPayment.Models
     {
         public Invoice Invoice { get; set; }
         public PaymentTransaction PaymentTransaction { get; set; }
+        public bool IsTotalPayment { get; set; } // Indicates if it is a full payment
+        public decimal PartialPaymentAmount { get; set; } // Partial payment amount
     }
 }

@@ -1,18 +1,65 @@
 @model AcountSearchAndPayment.Models.PayInvoiceViewModel
 
-@using (Html.BeginForm("PayInvoice", "Invoice", FormMethod.Post))
+@using (Html.BeginForm("RegisterPayment", "Invoice", FormMethod.Post))
 {
-	<div class="form-group">
-		@Html.LabelFor(model => model.Invoice.AmountDue)
-		@Html.DisplayFor(model => model.Invoice.AmountDue)
+	@Html.HiddenFor(model => model.Invoice.InvoiceId)
+	@Html.HiddenFor(model => model.Invoice.AmountDue)
+
+<form class="border p-4">
+	<div class="row">
+		<div class="col-md-6 mb-2">
+			<div class="form-group">
+				@Html.LabelFor(model => model.Invoice.InvoiceNumber, new { @class = "input-group-text" })
+				@Html.DisplayFor(model => model.Invoice.InvoiceNumber)
+			</div>
+		</div>
+		<div class="col-md-6 mb-2">
+			<div class="form-group">
+				@Html.LabelFor(model => model.Invoice.AmountDue, new { @class = "input-group-text" })
+				@Html.DisplayFor(model => model.Invoice.AmountDue)
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6 mb-2">
+			<div class="form-check">
+				@Html.CheckBoxFor(model => model.IsTotalPayment, new { id = "isTotalPayment", @class = "form-check-input" })
+				@Html.LabelFor(model => model.IsTotalPayment, "Payment in Full", new { @class = "input-text" })
+			</div>
+		</div>
+		<div class="col-md-6 mb-2">
+			<div class="partial-payment">
+				@Html.LabelFor(model => model.PaymentTransaction.PaymentAmount, new { @class = "input-group-text" })
+				<div class="input-group mb-3">
+					<span class="input-group-text">$</span>
+					@Html.EditorFor(model => model.PaymentTransaction.PaymentAmount, new { id = "partialPaymentAmount", @class = "form-control" })
+				</div>
+			</div>
+		</div>
 	</div>
 
-	<div class="form-group">
-		@Html.LabelFor(model => model.PaymentTransaction.PaymentAmount)
-		@Html.EditorFor(model => model.PaymentTransaction.PaymentAmount)
-	</div>
-
-	<!-- Otras propiedades del modelo PaymentTransaction -->
+	<br />
 
 	<button type="submit" class="btn btn-primary">Register payment</button>
+</form>
 }
+
+<script>
+    var isTotalPaymentCheckbox = document.getElementById("isTotalPayment");
+    var partialPaymentDiv = document.querySelector(".partial-payment");
+
+    // Agregar un evento de cambio a la casilla de verificación
+    isTotalPaymentCheckbox.addEventListener("change", function () {
+        if (isTotalPaymentCheckbox.checked) {
+            // Si se selecciona "Payment in Full", ocultar el div
+            partialPaymentDiv.style.display = "none";
+        } else {
+            // Si se deselecciona, mostrar el div
+            partialPaymentDiv.style.display = "block";
+        }
+    });
+</script>
+
+
+
+
